@@ -77,8 +77,25 @@ class WeatherService {
 		const forecastUrl = `${this.baseUrl}/data/2.5/forecast?q=${city}&units=imperial&appid=${this.apiKey}`;
 		const forecast = await fetch(forecastUrl);
 		const forecastJson = await forecast.json();
-		console.log(forecastJson);
-		return [parsedCurrentWeather];
+		// console.log(forecastJson);
+		const indexArray = [0, 8, 16, 24, 32];
+		const filteredForecast = forecastJson.list.filter(
+			(_element: any, index: number) => indexArray.includes(index)
+		);
+		const restructuredForecast = filteredForecast.map(
+			(element: any) =>
+				new Weather(
+					forecastJson.city.name,
+					element.dt,
+					element.weather[0].icon,
+					element.weather[0].description,
+					element.main.temp,
+					element.wind.speed,
+					element.main.humidity
+				)
+		);
+		console.log(restructuredForecast);
+		return [parsedCurrentWeather, ...restructuredForecast];
 	}
 }
 
