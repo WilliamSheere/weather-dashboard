@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -66,7 +67,7 @@ class WeatherService {
 		// console.log(currentWeatherJson)
 		const parsedCurrentWeather = new Weather(
 			currentWeatherJson.name,
-			currentWeatherJson.dt,
+			dayjs.unix(currentWeatherJson.dt).format("DD/MM/YYYY"),
 			currentWeatherJson.weather[0].icon,
 			currentWeatherJson.weather[0].description,
 			currentWeatherJson.main.temp,
@@ -86,7 +87,7 @@ class WeatherService {
 			(element: any) =>
 				new Weather(
 					forecastJson.city.name,
-					element.dt,
+					dayjs.unix(element.dt).format("DD/MM/YYYY"),
 					element.weather[0].icon,
 					element.weather[0].description,
 					element.main.temp,
@@ -94,7 +95,7 @@ class WeatherService {
 					element.main.humidity
 				)
 		);
-		console.log(restructuredForecast);
+		// console.log(restructuredForecast);
 		return [parsedCurrentWeather, ...restructuredForecast];
 	}
 }
